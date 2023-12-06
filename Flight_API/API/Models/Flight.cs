@@ -7,7 +7,6 @@ namespace API.Models;
 public class FlightObject
 {
     [Key]
-    [Required(ErrorMessage = "Flight number is required")]
     [MaxLength(5)]
     public string? Flight_No { get; init; }
 
