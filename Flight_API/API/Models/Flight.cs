@@ -16,7 +16,7 @@ public class FlightObject
     
     [Required(ErrorMessage = "Origin is required")]
     [MaxLength(3)]
-    public string    Origin { get; set; } = string.Empty;
+    public string Origin { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Destination is required")]
     [MaxLength(3)]

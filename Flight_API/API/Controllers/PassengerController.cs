@@ -6,6 +6,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class FlightController : ControllerBase
+public class PassengerController
 {
+
 }
