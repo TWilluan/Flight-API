@@ -22,6 +22,6 @@ public class PassengerObject
     [EmailAddress(ErrorMessage = "The email is not valud")]
     public string Email { get; set; } = string.Empty;
     
-    public FlightObject Flight { get; set; } = new();
+    public string Flight_No { get; set; } = string.Empty;
     public string Seat { get; set; } = string.Empty;
 }

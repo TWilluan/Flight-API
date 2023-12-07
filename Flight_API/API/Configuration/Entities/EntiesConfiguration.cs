@@ -10,17 +10,17 @@ public class FlightConfiguration : IEntityTypeConfiguration<FlightObject>
         builder.HasData(
             new FlightObject
             {
-                Flight_No = "",
+                Flight_No = "AYE35",
                 Capacity = 150,
-                Origin = "Dulles",
-                Destination = "Tan Son Nhat",
+                Origin = "DUL",
+                Destination = "TSA",
             },
             new FlightObject
             {
-                Flight_No = "",
+                Flight_No = "EYA23",
                 Capacity = 180,
-                Origin = "Tan Son Nhat",
-                Destination = "Dulles",
+                Origin = "TSA",
+                Destination = "DUL",
             });
     }
 }
@@ -36,6 +36,7 @@ public class PassengerConfiguration : IEntityTypeConfiguration<PassengerObject>
                 FirstName = "Tuan",
                 LastName = "Vo",
                 Email = "abc@gmail.com",
+                Flight_No = "AYE35"
             },
 
             new PassengerObject
@@ -44,6 +45,7 @@ public class PassengerConfiguration : IEntityTypeConfiguration<PassengerObject>
                 FirstName = "Chi",
                 LastName = "Le",
                 Email = "cba@gmail.com",
+                Flight_No = "EYA23"
             }
         );
     }
