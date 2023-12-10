@@ -1,5 +1,6 @@
 
 
+using API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -9,8 +10,11 @@ namespace API.Controllers;
 public class PassengerController : ControllerBase
 {
     [HttpPost]
-    public IActionResult CreatePassenger()
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> CreatePassenger([FromBody] FlightObject flight)
     {
+        
         return Ok();
     }
 
