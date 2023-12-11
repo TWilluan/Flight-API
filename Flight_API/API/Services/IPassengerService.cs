@@ -4,11 +4,11 @@ using API.DTOs;
 
 namespace API.Service;
 
-public interface PassengerService
+public interface IPassengerService
 {
-    public Task CreatePassenger(Create_PassengerDTO passenger);
-    public Task<IEnumerable<Reponse_PassengerDTO>> GetAllPassenger();
-    public Task GetPassenger(Guid pass_id);
-    public Task UpdatePassenger(Guid pass_id, Update_PassengerDTO passenger);
-    public Task DeletePassenger(Guid pass_id);
+    Task CreatePassenger(Create_PassengerDTO passenger);
+    Task<IEnumerable<Reponse_PassengerDTO>> GetAllPassenger();
+    Task<Reponse_PassengerDTO> GetPassenger(Guid pass_id);
+    Task UpdatePassenger(Guid pass_id, Update_PassengerDTO passenger);
+    Task DeletePassenger(Guid pass_id);
 }

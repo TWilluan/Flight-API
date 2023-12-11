@@ -23,5 +23,5 @@ public class FlightObject
     public DateTime Time_Ori { get; set; }
     public DateTime Time_Des { get; set; }
     public string Gate { get; set; } = string.Empty;
-    public List<PassengerObject> list_passenger = new();
+    public List<PassengerObject> List_Passenger = new();
 }

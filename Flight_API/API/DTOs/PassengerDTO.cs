@@ -4,8 +4,6 @@ using System.ComponentModel.DataAnnotations;
 namespace API.DTOs;
 public class Create_PassengerDTO : DTOs
 {
-    public Guid Passenger_ID { get; init; }
-
     [Required(ErrorMessage = "The First Name is required")]
     [MaxLength(24)]
     public string FirstName { get; set; } = string.Empty;
@@ -21,7 +19,7 @@ public class Create_PassengerDTO : DTOs
     public string Seat { get; set; } = string.Empty;
 }
 
-public class Update_PassengerDTO : Create_FlightDTO, DTOs {}
+public class Update_PassengerDTO : Create_PassengerDTO, DTOs {}
 
 public class Reponse_PassengerDTO : DTOs
 {
