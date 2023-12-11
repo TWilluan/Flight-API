@@ -1,18 +1,24 @@
 
 
+using API.Controller;
 using API.Data;
+using API.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using API.Contracts.Flights;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class FlightController : ControllerBase
+public class FlightController : ApiController
 {
     [HttpPost]
-    public IActionResult CreateFlight()
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> CreateFlight([FromBody] CreateFlight_Request flight)
     {
-        return Ok();
+        
     }
 
     [HttpGet]

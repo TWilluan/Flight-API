@@ -39,5 +39,5 @@ public class Reponse_FlightDTO : DTOs
 
 public class Reponse_FlightDetailDTO : Reponse_FlightDTO, DTOs
 {
-    public int Capacity { get; set; }
+    public int Capacity { get; init; }
 }

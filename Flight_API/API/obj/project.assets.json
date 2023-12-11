@@ -500,6 +500,16 @@
         "build": {
           "buildTransitive/net6.0/System.Text.Json.targets": {}
         }
+      },
+      "API.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/API.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/API.Contracts.dll": {}
+        }
       }
     }
   },
@@ -1470,10 +1480,16 @@
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "API.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../API.Contracts/API.Contracts.csproj",
+      "msbuildProject": "../API.Contracts/API.Contracts.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "API.Contracts >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 7.0.11",
       "Microsoft.EntityFrameworkCore >= 7.0.2",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.2",
@@ -1507,7 +1523,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/API.Contracts.csproj": {
+              "projectPath": "/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/API.Contracts.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
