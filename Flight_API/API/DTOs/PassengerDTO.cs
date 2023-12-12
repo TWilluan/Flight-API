@@ -35,7 +35,8 @@ public class Reponse_PassengerDTO : DTOs
 
 public class Reponse_PassengerDetailDTO : Reponse_PassengerDTO, DTOs
 {
-    [Required(ErrorMessage = "The email is required")]
-    [EmailAddress(ErrorMessage = "The email is not valud")]
+    public Guid Passenger_ID { get; init; }
+    
+    [EmailAddress(ErrorMessage = "The email is not valid")]
     public string Email { get; set; } = string.Empty;
 }
