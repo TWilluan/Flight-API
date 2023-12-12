@@ -1,0 +1,12 @@
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/bin/Debug/net7.0/API.Contracts.deps.json
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/bin/Debug/net7.0/API.Contracts.dll
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/bin/Debug/net7.0/API.Contracts.pdb
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/API.Contracts.csproj.AssemblyReference.cache
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/API.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/API.Contracts.AssemblyInfoInputs.cache
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/API.Contracts.AssemblyInfo.cs
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/API.Contracts.csproj.CoreCompileInputs.cache
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/API.Contracts.dll
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/refint/API.Contracts.dll
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/API.Contracts.pdb
+/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API.Contracts/obj/Debug/net7.0/ref/API.Contracts.dll

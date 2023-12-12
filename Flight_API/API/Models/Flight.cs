@@ -8,17 +8,17 @@ public class FlightObject
 {
     [Key]
     [MaxLength(5)]
-    public string? Flight_No { get; init; }
+    public string Flight_No { get; init; } = null!;
 
-    [Required(ErrorMessage = "Flight's Capacity is required")]
+    [Required]
     public int Capacity { get; init; }
     
-    [Required(ErrorMessage = "Origin is required")]
-    [MaxLength(3)]
+    [Required]
+    [StringLength(3, MinimumLength = 3, ErrorMessage = "The origin muse have exactly 3 characters)")]
     public string Origin { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Destination is required")]
-    [MaxLength(3)]
+    [Required]
+    [StringLength(3, MinimumLength = 3, ErrorMessage = "The destination muse have exactly 3 characters")]
     public string Destination { get; set; } = string.Empty;
     public DateTime Time_Ori { get; set; }
     public DateTime Time_Des { get; set; }
