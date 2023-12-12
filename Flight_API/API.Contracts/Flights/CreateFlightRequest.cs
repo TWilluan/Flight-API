@@ -6,14 +6,21 @@ namespace API.Contracts.Flights;
 
 public record CreateFlight_Request
 {
-    [StringLength(5, MinimumLength = 5, ErrorMessage = "Flight_no must have extractly 5 character")]
+    [Required]
+    [MaxLength(5)]
+    [MinLength(5)]
     public string Flight_no { get; init; } = null!;
+    [Required]
     public int Capacity { get; set; }
 
-    [StringLength(3, MinimumLength = 3, ErrorMessage = "Origin must have 3 characters")]
+    [Required]
+    [MaxLength(3)]
+    [MinLength(3)]
     public string Origin { get; set; } = string.Empty;
 
-    [StringLength(3, MinimumLength = 3, ErrorMessage = "Destination must have 3 characters")]
+    [Required]
+    [MaxLength(3)]
+    [MinLength(3)]
     public string Destination { get; set; } = string.Empty;
     public DateTime Time_Ori { get; set; }
     public DateTime Time_Des { get; set; }

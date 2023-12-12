@@ -9,9 +9,13 @@ namespace API.Models;
 public class FlightObject
 {
     [Key]
+    public Guid FlightID {get; init;}
+    
+    [Required]
     [MaxLength(5)]
     [MinLength(5)]
     public string FlightNo {get; init;} = null!;
+    
     [Required]
     public int Capacity {get; set;}
     
