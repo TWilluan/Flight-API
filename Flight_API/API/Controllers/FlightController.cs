@@ -31,11 +31,11 @@ public class FlightController : ApiController
 
         return CreatedAtAction(
             actionName: (nameof(CreateFlight)),
-            routeValues: new {flight_no = flight_dto.Flight_no},
+            routeValues: new {flight_no = flight_dto.Flight_No},
             value: flight_dto);
     }
 
-    [HttpGet("{flight_no:string}")]
+    [HttpGet("{flight_no:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -55,20 +55,43 @@ public class FlightController : ApiController
     {
         var flights = await _service.GetAllFlight();
         
-        
-        return Ok(flights);
+        //convert to reponse contracts
+        IEnumerable<Flight_Reponse> results = flights.Select(
+                                            f => new Flight_Reponse{
+                                                Flight_No = f.Flight_No,
+                                                Origin = f.Origin,
+                                                Destination = f.Destination,
+                                                Time_Ori = f.Time_Ori,
+                                                Time_Des = f.Time_Des,
+                                                Gate = f.Gate
+                                            });
+        return Ok(results);
     }
 
-    // [HttpPut("{flight_no:string}")]
-    // public async Task<IActionResult> UpdateFlight(string flight_no, UpdateFlight_Request flight)
-    // {
-        
-    // }
-
-    [HttpDelete]
-    public IActionResult DeleteFlight()
+    [HttpPut("{flight_no:guid}")]
+    public async Task<IActionResult> UpdateFlight(string flight_no, UpdateFlight_Request flight)
     {
+        var flight_dto = new Update_FlightDTO{
+            Flight_No = flight.Flight_no,
+            Origin = flight.Origin,
+            Destination = flight.Destination,
+            Time_Ori = flight.Time_Ori,
+            Time_Des = flight.Time_Des,
+            Gate = flight.Gate
+        };
+
+        await _service.UpdateFlight(flight_no, flight_dto);
         return Ok();
+    }
+
+    [HttpDelete("{flight_no:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteFlight(string flight_no)
+    {
+            await _service.DeleteFlight(flight_no);
+            return NoContent(); // 204 No Content
     }
 
     /*
@@ -78,7 +101,7 @@ public class FlightController : ApiController
     {
         var result = new Create_FlightDTO
         {
-            Flight_no = flight.Flight_no,
+            Flight_No = flight.Flight_no,
             Capacity = flight.Capacity,
             Origin = flight.Origin,
             Destination = flight.Destination,
@@ -93,7 +116,7 @@ public class FlightController : ApiController
     {
         var result = new Flight_Reponse
         {
-            flight_no = flight.flight_no,
+            Flight_No = flight.Flight_No,
             Origin = flight.Origin,
             Destination = flight.Destination,
             Time_Ori = flight.Time_Ori,

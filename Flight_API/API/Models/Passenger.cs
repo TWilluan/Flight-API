@@ -3,25 +3,22 @@
 // This is the passenger object structuring passenger information and
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models;
 
-public class PassengerObject
+/*********************************************************
+    Represents a passenger object containing information 
+        about a specific passenger and her/his flight.
+**********************************************************/
+
+public class PassengerObject : People
 {
     [Key]
     public Guid Passenger_ID { get; init; }
 
-    [Required]
-    [MaxLength(24)]
-    public string FirstName { get; set; } = string.Empty;
-    [Required]
-    [MaxLength(24)]
-    public string LastName { get; set; } = string.Empty;
-
-    [Required]
-    [EmailAddress(ErrorMessage = "The email is not valid")]
-    public string Email { get; set; } = string.Empty;
-    
-    public string Flight_No { get; set; } = string.Empty;
+    [ForeignKey((nameof(Flight)))]
+    public string Flight_No {get;set;} = null!;
+    public FlightObject Flight {get;set;} = default!;
     public string Seat { get; set; } = string.Empty;
 }

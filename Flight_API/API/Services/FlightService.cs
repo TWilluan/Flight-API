@@ -19,7 +19,7 @@ public class FlightService : IFlightService
     {
         var _flight = new FlightObject
         {
-            Flight_No = flight.Flight_no,
+            Flight_No = flight.Flight_No,
             Capacity = flight.Capacity,
             Origin = flight.Origin,
             Destination = flight.Destination,
@@ -33,8 +33,7 @@ public class FlightService : IFlightService
     }
     public async Task UpdateFlight(string flight_no, Update_FlightDTO flight_update)
     {
-        var flight = await _dbContext.Flights.
-                            FirstOrDefaultAsync(f => f.Flight_No == flight_no);
+        var flight = await _dbContext.Flights.FirstOrDefaultAsync(f => f.Flight_No == flight_no);
 
         { //update flight information
             flight.Origin = flight_update.Origin;
@@ -50,7 +49,7 @@ public class FlightService : IFlightService
         var flights = await _dbContext.Flights.
                             Select(f => new Reponse_FlightDTO
                             {
-                                flight_no = f.Flight_No,
+                                Flight_No = f.Flight_No,
                                 Origin = f.Origin,
                                 Destination = f.Destination,
                                 Time_Ori = f.Time_Ori,
@@ -66,13 +65,13 @@ public class FlightService : IFlightService
                     Where(f => f.Flight_No == flight_no).
                     Select(f => new Reponse_FlightDTO
                         {
-                            flight_no = f.Flight_No,
+                            Flight_No = f.Flight_No,
                             Origin = f.Origin,
                             Destination = f.Destination,
                             Time_Ori = f.Time_Ori,
                             Time_Des = f.Time_Des,
                             Gate = f.Gate
-                        }).FirstOrDefaultAsync();
+                        }).FirstAsync();
 
         // handlle not found exception
         return flight;
@@ -80,7 +79,7 @@ public class FlightService : IFlightService
     public async Task DeleteFlight(string flight_no)
     {
         var flight = await _dbContext.Flights.
-                        FirstOrDefaultAsync(f => f.Flight_No == flight_no);
+                        FirstAsync(f => f.Flight_No == flight_no);
 
         _dbContext.Flights.Remove(flight);
         await _dbContext.SaveChangesAsync();

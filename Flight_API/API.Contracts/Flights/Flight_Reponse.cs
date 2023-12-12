@@ -7,7 +7,7 @@ namespace API.Contracts.Flights;
 public record Flight_Reponse
 {
     [StringLength(5, MinimumLength = 5, ErrorMessage = "Flight_no must have extractly 5 character")]
-    public string? flight_no { get; init; }
+    public string Flight_No { get; init; } = null!;
 
     [StringLength(3, MinimumLength = 3, ErrorMessage = "Origin must have 3 characters")]
     public string Origin { get; set; } = string.Empty;
