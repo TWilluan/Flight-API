@@ -19,7 +19,7 @@ public class FlightService : IFlightService
     {
         var _flight = new FlightObject
         {
-            Flight_No = flight.Flight_No,
+            FlightNo = flight.FlightNo,
             Capacity = flight.Capacity,
             Origin = flight.Origin,
             Destination = flight.Destination,
@@ -33,7 +33,7 @@ public class FlightService : IFlightService
     }
     public async Task UpdateFlight(string flight_no, Update_FlightDTO flight_update)
     {
-        var flight = await _dbContext.Flights.FirstOrDefaultAsync(f => f.Flight_No == flight_no);
+        var flight = await _dbContext.Flights.FirstOrDefaultAsync(f => f.FlightNo == flight_no);
 
         { //update flight information
             flight.Origin = flight_update.Origin;
@@ -62,10 +62,10 @@ public class FlightService : IFlightService
     public async Task<Reponse_FlightDTO> GetFlight(string flight_no)
     {
         var flight = await _dbContext.Flights.
-                    Where(f => f.Flight_No == flight_no).
+                    Where(f => f.FlightNo == flight_no).
                     Select(f => new Reponse_FlightDTO
                         {
-                            Flight_No = f.Flight_No,
+                            FlightNo = f.FlightNo,
                             Origin = f.Origin,
                             Destination = f.Destination,
                             Time_Ori = f.Time_Ori,
@@ -79,7 +79,7 @@ public class FlightService : IFlightService
     public async Task DeleteFlight(string flight_no)
     {
         var flight = await _dbContext.Flights.
-                        FirstAsync(f => f.Flight_No == flight_no);
+                        FirstAsync(f => f.FlightNo == flight_no);
 
         _dbContext.Flights.Remove(flight);
         await _dbContext.SaveChangesAsync();
