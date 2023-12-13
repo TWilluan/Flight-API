@@ -18,7 +18,7 @@ public class PassengerObject : People
     public Guid Passenger_ID { get; init; }
 
     [ForeignKey((nameof(Flight)))]
-    public string Flight_No {get;set;} = null!;
+    public Guid FlightID {get;set;}
     public FlightObject Flight {get;set;} = default!;
     public string Seat { get; set; } = string.Empty;
 }

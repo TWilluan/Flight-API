@@ -1,42 +1,38 @@
 
 using System.ComponentModel.DataAnnotations;
+using API.Models;
 
 namespace API.DTOs;
 public class Create_PassengerDTO : DTOs
 {
-    [Required(ErrorMessage = "The First Name is required")]
+    [Required]
     [MaxLength(24)]
     public string FirstName { get; set; } = string.Empty;
-    [Required(ErrorMessage = "The Last Name is required")]
+
+    [Required]
     [MaxLength(24)]
     public string LastName { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "The email is required")]
-    [EmailAddress(ErrorMessage = "The email is not valud")]
-    public string Email { get; set; } = string.Empty;
-
-    public string Flight_No { get; set; } = string.Empty;
+    [Required]
+    public string Email { get; set; } = string.Empty + "@gmail.com";
+    [Required]
+    public Guid FlightID { get; set; }
+    public string? FlightNo { get; set; }
     public string Seat { get; set; } = string.Empty;
 }
 
-public class Update_PassengerDTO : Create_PassengerDTO, DTOs {}
+public class Update_PassengerDTO : Create_PassengerDTO, DTOs { }
 
 public class Reponse_PassengerDTO : DTOs
 {
-    [Required(ErrorMessage = "The First Name is required")]
-    [MaxLength(24)]
     public string FirstName { get; set; } = string.Empty;
-    [Required(ErrorMessage = "The Last Name is required")]
-    [MaxLength(24)]
     public string LastName { get; set; } = string.Empty;
-    public string Flight_No { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string? FlightNo { get; set; }
     public string Seat { get; set; } = string.Empty;
 }
 
 public class Reponse_PassengerDetailDTO : Reponse_PassengerDTO, DTOs
 {
-    public Guid Passenger_ID { get; init; }
-    
-    [EmailAddress(ErrorMessage = "The email is not valid")]
-    public string Email { get; set; } = string.Empty;
+    public FlightObject Flight { get; set; } = default!;
 }
