@@ -1,6 +1,9 @@
 # Flight REST API
 
-Welcome to the Flight REST API documentation! This API provides a set of endpoints to access and manage flight-related information. Whether you're building a travel application, tracking flights, or integrating flight data into your system, this API has you covered.
+Welcome to the Flight REST API documentation! This API provides a set of 
+endpoints to access and manage flight-related information. Whether you're 
+building a travel application, tracking flights, or integrating flight data 
+into your system, this API has you covered.
 
 ## Table of Contents
 
