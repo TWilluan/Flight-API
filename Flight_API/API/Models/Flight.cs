@@ -31,5 +31,5 @@ public class FlightObject
     public DateTime Time_Ori { get; set; }
     public DateTime Time_Des { get; set; }
     public string Gate { get; set; } = string.Empty;
-    public ICollection<PassengerFlight_Mapping>? Mapper {get;set;}
+    public ICollection<PassengerFlight_Mapping>? PassengerFlightMapper { get;set;}
 }

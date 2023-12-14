@@ -16,5 +16,5 @@ public class PassengerObject : People
 {
     [Key]
     public Guid Passenger_ID { get; init; }
-    public ICollection<PassengerFlight_Mapping>? Mapper {get;set;}
+    public ICollection<PassengerFlight_Mapping>? PassengerFlightMapper {get;set;}
 }

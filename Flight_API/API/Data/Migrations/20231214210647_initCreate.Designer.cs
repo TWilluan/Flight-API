@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(APIdbContext))]
-    [Migration("20231207203205_initCreate")]
+    [Migration("20231214210647_initCreate")]
     partial class initCreate
     {
         /// <inheritdoc />
@@ -24,9 +24,9 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Models.FlightObject", b =>
                 {
-                    b.Property<string>("Flight_No")
-                        .HasMaxLength(5)
-                        .HasColumnType("varchar(5)");
+                    b.Property<Guid>("FlightID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
@@ -35,6 +35,11 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(3)
                         .HasColumnType("varchar(3)");
+
+                    b.Property<string>("FlightNo")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)");
 
                     b.Property<string>("Gate")
                         .IsRequired()
@@ -51,31 +56,51 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("Time_Ori")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("Flight_No");
+                    b.HasKey("FlightID");
 
                     b.ToTable("Flights");
 
                     b.HasData(
                         new
                         {
-                            FlightNo = "AYE35",
+                            FlightID = new Guid("b7d6a643-b638-49ce-a9a4-5c0f58aa6e08"),
                             Capacity = 150,
                             Destination = "TSA",
+                            FlightNo = "AYE35",
                             Gate = "",
                             Origin = "DUL",
                             TimeDes = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TimeOri = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            TimeOri = new DateTime(2023, 12, 14, 16, 6, 46, 852, DateTimeKind.Local).AddTicks(8740)
                         },
                         new
                         {
-                            FlightNo = "EYA23",
+                            FlightID = new Guid("cb4b7ea6-ef3a-4340-a46a-a41e8441058f"),
                             Capacity = 180,
                             Destination = "DUL",
+                            FlightNo = "EYA23",
                             Gate = "",
                             Origin = "TSA",
                             TimeDes = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TimeOri = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
+                });
+
+            modelBuilder.Entity("API.Models.PassengerFlight_Mapping", b =>
+                {
+                    b.Property<Guid>("FlightID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("PassengerID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("BookingTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("FlightID", "PassengerID");
+
+                    b.HasIndex("PassengerID");
+
+                    b.ToTable("PassengerFlightMappings");
                 });
 
             modelBuilder.Entity("API.Models.PassengerObject", b =>
@@ -93,18 +118,10 @@ namespace API.Data.Migrations
                         .HasMaxLength(24)
                         .HasColumnType("varchar(24)");
 
-                    b.Property<string>("Flight_No")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(24)
                         .HasColumnType("varchar(24)");
-
-                    b.Property<string>("Seat")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("Passenger_ID");
 
@@ -113,22 +130,47 @@ namespace API.Data.Migrations
                     b.HasData(
                         new
                         {
-                            PassengerID = new Guid("f92c112a-30f0-4164-8128-d7de7e38a304"),
+                            PassengerID = new Guid("74ac97a5-df82-4a74-8d41-35324a4c00c7"),
                             Email = "abc@gmail.com",
                             FirstName = "Tuan",
-                            FlightNo = "AYE35",
-                            LastName = "Vo",
-                            Seat = ""
+                            LastName = "Vo"
                         },
                         new
                         {
-                            PassengerID = new Guid("d118bc6e-d5fc-4baf-8632-cc3763dca1a6"),
+                            PassengerID = new Guid("3009d2b7-2941-46d6-920e-1e3a6e769436"),
                             Email = "cba@gmail.com",
                             FirstName = "Chi",
-                            FlightNo = "EYA23",
-                            LastName = "Le",
-                            Seat = ""
+                            LastName = "Le"
                         });
+                });
+
+            modelBuilder.Entity("API.Models.PassengerFlight_Mapping", b =>
+                {
+                    b.HasOne("API.Models.FlightObject", "Flight")
+                        .WithMany("PassengerFlightMapper")
+                        .HasForeignKey("FlightID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.PassengerObject", "Passenger")
+                        .WithMany("PassengerFlightMapper")
+                        .HasForeignKey("PassengerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Flight");
+
+                    b.Navigation("Passenger");
+                });
+
+            modelBuilder.Entity("API.Models.FlightObject", b =>
+                {
+                    b.Navigation("PassengerFlightMapper");
+                });
+
+            modelBuilder.Entity("API.Models.PassengerObject", b =>
+                {
+                    b.Navigation("PassengerFlightMapper");
                 });
 #pragma warning restore 612, 618
         }

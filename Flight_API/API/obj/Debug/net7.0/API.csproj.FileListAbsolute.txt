@@ -41,5 +41,3 @@
 /Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API/bin/Debug/net7.0/System.CodeDom.dll
 /Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API/bin/Debug/net7.0/MySqlConnector.dll
 /Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API/bin/Debug/net7.0/Pomelo.EntityFrameworkCore.MySql.dll
-/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API/bin/Debug/net7.0/API.Contracts.dll
-/Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API/bin/Debug/net7.0/API.Contracts.pdb
