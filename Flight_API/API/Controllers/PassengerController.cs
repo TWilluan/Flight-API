@@ -9,4 +9,5 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class PassengerController : ControllerBase
 {
+    
 }
