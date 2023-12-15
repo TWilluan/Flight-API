@@ -2,6 +2,12 @@
 
 namespace API.Models;
 
+/*********************************************************
+    Juntion table
+    Represents the relationship between passenger 
+            and flight object
+**********************************************************/
+
 public class PassengerFlight_Mapping
 {
     public int PassengerID {get;init;}
