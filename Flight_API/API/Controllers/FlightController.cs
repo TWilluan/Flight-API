@@ -35,18 +35,23 @@ public class FlightController : ApiController
             return BadRequest(ModelState);
 
         // Call service to add flight to database
-
-        return Ok();
+        await _flightService.CreateFlight(flight);
+        return Created(
+            new Uri($"{Request.Path}/{flight.FlightNo}", UriKind.Relative), 
+            flight);
     }
 
-    // GET: ../api/flight/id
-    [HttpGet("{id:guid}")]
+    // GET: ../api/flight/flightno
+    [HttpGet("{FlightNo}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<Reponse_FlightDTO>> GetFlight(Guid id)
+    public async Task<ActionResult<Reponse_FlightDTO>> GetFlight(string FlightNo)
     {
-        return Ok();
+        _logger.LogInformation($"Calling: {nameof(GetFlight)}");
+
+        var flight = await _flightService.GetFlight(FlightNo);
+        return Ok(flight);
     }
 
     [HttpGet]
@@ -54,20 +59,31 @@ public class FlightController : ApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<IEnumerable<Reponse_FlightDetailDTO>>> GetAllFlight()
     {
+        _logger.LogInformation($"Calling: {nameof(GetAllFlight)}");
+
+        var flights = await _flightService.GetAllFlight();
+        return Ok(flights);
+    }
+
+    // PUT: ../api/flight/flightno
+    [HttpPut("{FlightNo}")]
+    public async Task<IActionResult> UpdateFlight(string FlightNo, Update_FlightDTO flight)
+    {
+        _logger.LogInformation($"Calling: {nameof(UpdateFlight)}");
+
+        await _flightService.UpdateFlight(FlightNo, flight);
+
         return Ok();
     }
 
-    // PUT: ../api/flight/id
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdatFlight(Guid id, Create_FlightDTO flight)
+    // DELETE : ../api/flight/flightno
+    [HttpDelete("{FlightNo}")]
+    public async Task<IActionResult> DeleteFlight(string FlightNo)
     {
-        return Ok();
-    }
-
-    // DELETE : ../api/flight/id
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteFlight(Guid id)
-    {
+        _logger.LogInformation($"Calling: {nameof(DeleteFlight)}");
+        
+        await _flightService.DeleteFlight(FlightNo);
+        
         return Ok();
     }
 }

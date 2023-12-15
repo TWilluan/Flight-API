@@ -1,0 +1,38 @@
+
+
+
+### Flight Request Test
+GET http://localhost:5212/flight/EYA23 HTTP/1.1
+
+###
+GET http://localhost:5212/flight/ HTTP/1.1
+
+###
+POST http://localhost:5212/flight/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "FlightNo": "HCM20",
+    "Capacity": 150,
+    "Origin": "HCM",
+    "Destination": "USA",
+    "Gate": "A13"
+}
+
+###
+GET http://localhost:5212/flight/HCM20 HTTP/1.1
+
+###
+PUT http://localhost:5212/flight/HCM20 HTTP/1.1
+Content-Type: application/json
+
+{
+    "FlightNo": "HCM20",
+    "Capacity": 180,
+    "Origin": "HCM",
+    "Destination": "LAX",
+    "Gate": "A16"
+}
+
+###
+DELETE http://localhost:5212/flight/EYA23 HTTP/1.1
