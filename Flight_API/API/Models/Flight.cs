@@ -18,6 +18,7 @@ public class FlightObject
     
     [Required]
     public int Capacity {get; set;}
+    public int Current_Pass {get;set;} = 0;
     
     [Required]
     [MaxLength(3)]

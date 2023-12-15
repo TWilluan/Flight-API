@@ -29,10 +29,7 @@ public class Create_FlightDTO : DTOs
     public string Gate { get; set; } = string.Empty;
 }
 
-public class Update_FlightDTO : Create_FlightDTO, DTOs 
-{
-    public Dictionary<Guid, PassengerObject>? List_Passenger;
-}
+public class Update_FlightDTO : Create_FlightDTO, DTOs {}
 
 public class Reponse_FlightDTO : DTOs
 {
@@ -42,4 +39,9 @@ public class Reponse_FlightDTO : DTOs
     public DateTime Time_Ori { get; set; }
     public DateTime Time_Des { get; set; }
     public string Gate { get; set; } = string.Empty;
+}
+
+public class Reponse_FlightDetailDTO : Reponse_FlightDTO, DTOs
+{
+    
 }

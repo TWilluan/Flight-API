@@ -34,5 +34,5 @@ public class Reponse_PassengerDTO : DTOs
 
 public class Reponse_PassengerDetailDTO : Reponse_PassengerDTO, DTOs
 {
-    public FlightObject Flight { get; set; } = default!;
+    public IEnumerable<FlightObject>? flights {get;set;}
 }
