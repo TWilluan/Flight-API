@@ -12,12 +12,30 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class FlightController : ApiController
 {
+    private ILogger<FlightController> _logger;
+    private IFlightService _flightService;
+
+    public FlightController(ILogger<FlightController> logger, IFlightService flightService)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _flightService = flightService ?? throw new ArgumentNullException(nameof(flightService));
+    }
+
+
+    // POST: ../api/flight/
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateFlight([FromBody] Create_FlightDTO flight)
     {
+        _logger.LogInformation($"Calling: {nameof(CreateFlight)}");
+
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        // Call service to add flight to database
+
         return Ok();
     }
 

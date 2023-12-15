@@ -19,12 +19,12 @@ public class APIdbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<PassengerFlight_Mapping>().
-            HasKey(fp => new {fp.FlightID, fp.PassengerID});
+            HasKey(fp => new {fp.FlightNo, fp.PassengerID});
 
         modelBuilder.Entity<PassengerFlight_Mapping>()
             .HasOne(fp => fp.Flight)
             .WithMany(f => f.PassengerFlightMapper)
-            .HasForeignKey(fp => fp.FlightID);
+            .HasForeignKey(fp => fp.FlightNo);
 
         modelBuilder.Entity<PassengerFlight_Mapping>()
             .HasOne(fp => fp.Passenger)

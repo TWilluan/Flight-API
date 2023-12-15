@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(APIdbContext))]
-    [Migration("20231214210647_initCreate")]
-    partial class initCreate
+    [Migration("20231215101452_initialSeed")]
+    partial class initialSeed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,22 +24,20 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Models.FlightObject", b =>
                 {
-                    b.Property<Guid>("FlightID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                    b.Property<string>("FlightNo")
+                        .HasMaxLength(5)
+                        .HasColumnType("varchar(5)");
 
                     b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Current_Pass")
                         .HasColumnType("int");
 
                     b.Property<string>("Destination")
                         .IsRequired()
                         .HasMaxLength(3)
                         .HasColumnType("varchar(3)");
-
-                    b.Property<string>("FlightNo")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("varchar(5)");
 
                     b.Property<string>("Gate")
                         .IsRequired()
@@ -56,28 +54,28 @@ namespace API.Data.Migrations
                     b.Property<DateTime>("Time_Ori")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("FlightID");
+                    b.HasKey("FlightNo");
 
                     b.ToTable("Flights");
 
                     b.HasData(
                         new
                         {
-                            FlightID = new Guid("b7d6a643-b638-49ce-a9a4-5c0f58aa6e08"),
-                            Capacity = 150,
-                            Destination = "TSA",
                             FlightNo = "AYE35",
+                            Capacity = 150,
+                            CurrentPass = 0,
+                            Destination = "TSA",
                             Gate = "",
                             Origin = "DUL",
                             TimeDes = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TimeOri = new DateTime(2023, 12, 14, 16, 6, 46, 852, DateTimeKind.Local).AddTicks(8740)
+                            TimeOri = new DateTime(2023, 12, 15, 5, 14, 52, 551, DateTimeKind.Local).AddTicks(1740)
                         },
                         new
                         {
-                            FlightID = new Guid("cb4b7ea6-ef3a-4340-a46a-a41e8441058f"),
-                            Capacity = 180,
-                            Destination = "DUL",
                             FlightNo = "EYA23",
+                            Capacity = 180,
+                            CurrentPass = 0,
+                            Destination = "DUL",
                             Gate = "",
                             Origin = "TSA",
                             TimeDes = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -87,16 +85,16 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Models.PassengerFlight_Mapping", b =>
                 {
-                    b.Property<Guid>("FlightID")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("FlightNo")
+                        .HasColumnType("varchar(5)");
 
-                    b.Property<Guid>("PassengerID")
-                        .HasColumnType("char(36)");
+                    b.Property<int>("PassengerID")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("BookingTime")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("FlightID", "PassengerID");
+                    b.HasKey("FlightNo", "PassengerID");
 
                     b.HasIndex("PassengerID");
 
@@ -105,9 +103,9 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Models.PassengerObject", b =>
                 {
-                    b.Property<Guid>("Passenger_ID")
+                    b.Property<int>("Passenger_ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -130,14 +128,14 @@ namespace API.Data.Migrations
                     b.HasData(
                         new
                         {
-                            PassengerID = new Guid("74ac97a5-df82-4a74-8d41-35324a4c00c7"),
+                            PassengerID = 1,
                             Email = "abc@gmail.com",
                             FirstName = "Tuan",
                             LastName = "Vo"
                         },
                         new
                         {
-                            PassengerID = new Guid("3009d2b7-2941-46d6-920e-1e3a6e769436"),
+                            PassengerID = 2,
                             Email = "cba@gmail.com",
                             FirstName = "Chi",
                             LastName = "Le"
@@ -148,7 +146,7 @@ namespace API.Data.Migrations
                 {
                     b.HasOne("API.Models.FlightObject", "Flight")
                         .WithMany("PassengerFlightMapper")
-                        .HasForeignKey("FlightID")
+                        .HasForeignKey("FlightNo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

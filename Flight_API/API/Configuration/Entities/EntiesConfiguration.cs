@@ -11,7 +11,6 @@ public class FlightConfiguration : IEntityTypeConfiguration<FlightObject>
         builder.HasData(
             new FlightObject
             {
-                FlightID = Guid.NewGuid(),
                 FlightNo = "AYE35",
                 Capacity = 150,
                 Origin = "DUL",
@@ -20,7 +19,6 @@ public class FlightConfiguration : IEntityTypeConfiguration<FlightObject>
             },
             new FlightObject
             {
-                FlightID = Guid.NewGuid(),
                 FlightNo = "EYA23",
                 Capacity = 180,
                 Origin = "TSA",
@@ -36,7 +34,7 @@ public class PassengerConfiguration : IEntityTypeConfiguration<PassengerObject>
         builder.HasData(
             new PassengerObject
             {
-                Passenger_ID = Guid.NewGuid(),
+                Passenger_ID = 1,
                 FirstName = "Tuan",
                 LastName = "Vo",
                 Email = "abc@gmail.com"
@@ -44,7 +42,7 @@ public class PassengerConfiguration : IEntityTypeConfiguration<PassengerObject>
 
             new PassengerObject
             {
-                Passenger_ID = Guid.NewGuid(),
+                Passenger_ID = 2,
                 FirstName = "Chi",
                 LastName = "Le",
                 Email = "cba@gmail.com"

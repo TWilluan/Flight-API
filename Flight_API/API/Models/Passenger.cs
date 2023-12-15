@@ -15,6 +15,7 @@ namespace API.Models;
 public class PassengerObject : People
 {
     [Key]
-    public Guid Passenger_ID { get; init; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Passenger_ID { get; init; }
     public ICollection<PassengerFlight_Mapping>? PassengerFlightMapper {get;set;}
 }

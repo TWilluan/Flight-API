@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initCreate : Migration
+    public partial class initialSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,10 +21,10 @@ namespace API.Data.Migrations
                 name: "Flights",
                 columns: table => new
                 {
-                    FlightID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     FlightNo = table.Column<string>(type: "varchar(5)", maxLength: 5, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Capacity = table.Column<int>(type: "int", nullable: false),
+                    CurrentPass = table.Column<int>(name: "Current_Pass", type: "int", nullable: false),
                     Origin = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Destination = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: false)
@@ -35,7 +36,7 @@ namespace API.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Flights", x => x.FlightID);
+                    table.PrimaryKey("PK_Flights", x => x.FlightNo);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -43,7 +44,8 @@ namespace API.Data.Migrations
                 name: "Passengers",
                 columns: table => new
                 {
-                    PassengerID = table.Column<Guid>(name: "Passenger_ID", type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PassengerID = table.Column<int>(name: "Passenger_ID", type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LastName = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: false)
@@ -61,18 +63,19 @@ namespace API.Data.Migrations
                 name: "PassengerFlightMappings",
                 columns: table => new
                 {
-                    PassengerID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    FlightID = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    PassengerID = table.Column<int>(type: "int", nullable: false),
+                    FlightNo = table.Column<string>(type: "varchar(5)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     BookingTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PassengerFlightMappings", x => new { x.FlightID, x.PassengerID });
+                    table.PrimaryKey("PK_PassengerFlightMappings", x => new { x.FlightNo, x.PassengerID });
                     table.ForeignKey(
-                        name: "FK_PassengerFlightMappings_Flights_FlightID",
-                        column: x => x.FlightID,
+                        name: "FK_PassengerFlightMappings_Flights_FlightNo",
+                        column: x => x.FlightNo,
                         principalTable: "Flights",
-                        principalColumn: "FlightID",
+                        principalColumn: "FlightNo",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PassengerFlightMappings_Passengers_PassengerID",
@@ -85,11 +88,11 @@ namespace API.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Flights",
-                columns: new[] { "FlightID", "Capacity", "Destination", "FlightNo", "Gate", "Origin", "Time_Des", "Time_Ori" },
+                columns: new[] { "FlightNo", "Capacity", "Current_Pass", "Destination", "Gate", "Origin", "Time_Des", "Time_Ori" },
                 values: new object[,]
                 {
-                    { new Guid("b7d6a643-b638-49ce-a9a4-5c0f58aa6e08"), 150, "TSA", "AYE35", "", "DUL", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 14, 16, 6, 46, 852, DateTimeKind.Local).AddTicks(8740) },
-                    { new Guid("cb4b7ea6-ef3a-4340-a46a-a41e8441058f"), 180, "DUL", "EYA23", "", "TSA", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { "AYE35", 150, 0, "TSA", "", "DUL", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 15, 5, 14, 52, 551, DateTimeKind.Local).AddTicks(1740) },
+                    { "EYA23", 180, 0, "DUL", "", "TSA", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -97,8 +100,8 @@ namespace API.Data.Migrations
                 columns: new[] { "Passenger_ID", "Email", "FirstName", "LastName" },
                 values: new object[,]
                 {
-                    { new Guid("3009d2b7-2941-46d6-920e-1e3a6e769436"), "cba@gmail.com", "Chi", "Le" },
-                    { new Guid("74ac97a5-df82-4a74-8d41-35324a4c00c7"), "abc@gmail.com", "Tuan", "Vo" }
+                    { 1, "abc@gmail.com", "Tuan", "Vo" },
+                    { 2, "cba@gmail.com", "Chi", "Le" }
                 });
 
             migrationBuilder.CreateIndex(
