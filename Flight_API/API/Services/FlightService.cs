@@ -58,7 +58,7 @@ public class FlightService : IFlightService
             Time_Ori = f.Time_Ori,
             Time_Des = f.Time_Des,
             Gate = f.Gate
-        });
+        }).ToList();
         return results;
     }
 

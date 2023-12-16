@@ -67,6 +67,9 @@ public class FlightController : ApiController
 
     // PUT: ../api/flight/flightno
     [HttpPut("{FlightNo}")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateFlight(string FlightNo, Update_FlightDTO flight)
     {
         _logger.LogInformation($"Calling: {nameof(UpdateFlight)}");
@@ -78,6 +81,9 @@ public class FlightController : ApiController
 
     // DELETE : ../api/flight/flightno
     [HttpDelete("{FlightNo}")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteFlight(string FlightNo)
     {
         _logger.LogInformation($"Calling: {nameof(DeleteFlight)}");
