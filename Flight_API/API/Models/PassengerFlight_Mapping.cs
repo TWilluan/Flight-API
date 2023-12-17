@@ -1,5 +1,7 @@
 
 
+using System.ComponentModel.DataAnnotations;
+
 namespace API.Models;
 
 /*********************************************************
@@ -10,11 +12,13 @@ namespace API.Models;
 
 public class PassengerFlight_Mapping
 {
+    [Key]
     public int PassengerID { get; init; }
+    [Key]
     public string FlightNo { get; init; } = null!;
 
-    public PassengerObject Passenger { get; set; } = null!;
-    public FlightObject Flight { get; set; } = null!;
+    public PassengerObject Passenger { get; set; } = default!;
+    public FlightObject Flight { get; set; } = default!;
 
     public string? Seat { get; set; }
     public DateTime BookingTime { get; set; }
