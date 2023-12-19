@@ -1,5 +1,6 @@
 
 
+using API.Configuration.Exceptions;
 using API.DTOs;
 using API.Models;
 using API.Service;
@@ -53,7 +54,7 @@ public class PassengerController : ControllerBase
         var flight = await _passService.GetPassenger(id);
 
         if (flight == null)
-            return NotFound();
+            throw new NotFoundException();
         
         return Ok(flight);
     }

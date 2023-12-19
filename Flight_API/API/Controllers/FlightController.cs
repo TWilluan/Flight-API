@@ -5,6 +5,7 @@ using API.Data;
 using API.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using API.Service;
+using API.Configuration.Exceptions;
 
 namespace API.Controllers;
 
@@ -19,6 +20,12 @@ public class FlightController : ApiController
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _flightService = flightService ?? throw new ArgumentNullException(nameof(flightService));
+    }
+
+    [HttpGet("test/notfound")]
+    public IActionResult TestNotFound()
+    {
+        throw new NotFoundException("Resource not found.");
     }
 
 
@@ -36,6 +43,7 @@ public class FlightController : ApiController
 
         // Call service to add flight to database
         await _flightService.CreateFlight(flight);
+        
         return Created(
             new Uri($"{Request.Path}/{flight.FlightNo}", UriKind.Relative), 
             flight);

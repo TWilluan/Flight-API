@@ -1,7 +1,6 @@
 
 
-using API.Data;
-using API.Service;
+using API.Configuration.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,14 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    builder.Services.AddScoped<IFlightService, FlightService>();
-    builder.Services.AddScoped<IPassengerService, PassengerService>();
-
-    builder.Services.AddDbContext<APIdbContext>(options =>
-        {
-            options.UseMySql(builder.Configuration.GetConnectionString("Default"),
-                            new MySqlServerVersion(new Version(8, 0, 31)));
-        });
+    builder.Add_GlobalErrorHandler();
+    builder.Add_Persistence();
 }
 
 var app = builder.Build();
@@ -33,4 +26,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+////
+app.UseGlobalErrorHandling();
+////
 app.Run();
