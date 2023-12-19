@@ -1,0 +1,11 @@
+2023-12-19 16:34:18.583 -05:00 [DBG] Registered model binder providers, in the following order: ["Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BinderTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ServicesModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.BodyModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.HeaderModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FloatingPointTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.EnumTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.SimpleTypeModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.TryParseModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CancellationTokenModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ByteArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormFileModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.FormCollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.KeyValuePairModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DictionaryModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ArrayModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.CollectionModelBinderProvider","Microsoft.AspNetCore.Mvc.ModelBinding.Binders.ComplexObjectModelBinderProvider"]
+2023-12-19 16:34:18.761 -05:00 [DBG] Hosting starting
+2023-12-19 16:34:18.844 -05:00 [INF] Now listening on: http://localhost:5212
+2023-12-19 16:34:18.844 -05:00 [DBG] Loaded hosting startup assembly API
+2023-12-19 16:34:18.847 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-12-19 16:34:18.848 -05:00 [INF] Hosting environment: Development
+2023-12-19 16:34:18.848 -05:00 [INF] Content root path: /Users/tuanvo/Documents/Projects/Webapp/Flight_API/Flight_API/API
+2023-12-19 16:34:18.848 -05:00 [DBG] Hosting started
+2023-12-19 16:34:59.919 -05:00 [INF] Application is shutting down...
+2023-12-19 16:34:59.921 -05:00 [DBG] Hosting stopping
+2023-12-19 16:34:59.985 -05:00 [DBG] Hosting stopped

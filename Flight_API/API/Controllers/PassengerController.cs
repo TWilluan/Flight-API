@@ -85,7 +85,7 @@ public class PassengerController : ApiController
     {
         _logger.LogInformation($"Calling: {nameof(GetAllFlights_PassengerHas)}");
 
-        var passengers = GetAllFlights_PassengerHas(id);
+        var passengers = await GetAllFlights_PassengerHas(id);
 
         return Ok(passengers); 
     }

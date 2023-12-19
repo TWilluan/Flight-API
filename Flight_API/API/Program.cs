@@ -12,8 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddSwaggerGen();
     
     //////// Custome extensions
+
     builder.AddGlobalErrorHandler();
     builder.AddPersistence();
+    builder.AddLogging();
     builder.AddMapper();
 }
 
