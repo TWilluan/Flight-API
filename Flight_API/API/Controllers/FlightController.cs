@@ -34,21 +34,31 @@ public class FlightController : ApiController
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateFlight([FromBody] Create_FlightDTO flight)
+    public async Task<ActionResult<Reponse_FlightDTO>> CreateFlight([FromBody] Create_FlightDTO new_flight)
     {
         _logger.LogInformation($"Calling: {nameof(CreateFlight)}");
 
-        await _flightService.CreateFlight(flight);
+        if (new_flight.Destination == new_flight.Origin)
+        { //    checking origin vs destination
+            ModelState.AddModelError(nameof(new_flight.Origin),
+                                    "Origin and Destination must be different");
+            return BadRequest(ModelState);
+        }
+        
+        if (!ModelState.IsValid)
+        { //    modelstate validation
+            return BadRequest(ModelState);
+        }
 
-        return CreatedAtAction(
-            actionName: nameof(GetFlight),
-            routeValues: new {id = flight.FlightNo},
-            value: flight
-        );
+        var flight = await _flightService.CreateFlight(new_flight);
+
+        _logger.LogInformation($"FlightNo in CreatedAtAction: {flight.FlightNo}");
+
+        return Created(new Uri($"{Request.Path}{flight.FlightNo}", UriKind.Relative), flight);
     }
 
     // GET: ../flight/flightno
-    [HttpGet("{FlightNo}")]
+    [HttpGet("{flightno}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -57,12 +67,14 @@ public class FlightController : ApiController
         _logger.LogInformation($"Calling: {nameof(GetFlight)}");
 
         var flight = await _flightService.GetFlight(FlightNo);
+        
         return Ok(flight);
     }
 
     // GET: ../flight
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<IEnumerable<Reponse_FlightDetailDTO>>> GetAllFlights()
     {
@@ -80,7 +92,12 @@ public class FlightController : ApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Reponse_PassengerDTO>>> GetAllPassenger_InFlight(string FlightNo)
     {
+        _logger.LogInformation($"Calling: {nameof(GetAllPassenger_InFlight)}");
+
+        await _flightService.GetAllPassenger_InFlight(FlightNo);
+
         return Ok();
+
     }
 
     // PUT: ../flight/flightno
@@ -97,7 +114,7 @@ public class FlightController : ApiController
         return Ok();
     }
 
-    // DELETE : ../flight/flightno
+    // DELETE: ../flight/flightno
     [HttpDelete("{FlightNo}")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]

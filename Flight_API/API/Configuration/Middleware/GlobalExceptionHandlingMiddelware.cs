@@ -35,12 +35,12 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
 
         switch(exception)
         {
-            case BadRequestException:
+            case BadRequestApiException:
                 statusCode = HttpStatusCode.BadRequest;
                 message = exception.Message;
                 stacktrace = exception.StackTrace;
                 break;
-            case NotFoundException:
+            case NotFoundApiException:
                 statusCode = HttpStatusCode.NotFound;
                 message = exception.Message;
                 stacktrace = exception.StackTrace;

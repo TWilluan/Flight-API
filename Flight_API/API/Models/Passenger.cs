@@ -18,5 +18,5 @@ public class PassengerObject : People
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Passenger_ID { get; init; }
 
-    public ICollection<PassengerFlight_Mapping> PassengerFlightMapper {get;set;} = default!;
+    public ICollection<PassengerFlight_Booking> PassengerFlightMapper {get;set;} = default!;
 }

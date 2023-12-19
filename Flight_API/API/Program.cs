@@ -10,8 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    builder.Add_GlobalErrorHandler();
-    builder.Add_Persistence();
+    
+    //////// Custome extensions
+    builder.AddGlobalErrorHandler();
+    builder.AddPersistence();
+    builder.AddMapper();
 }
 
 var app = builder.Build();

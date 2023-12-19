@@ -10,7 +10,7 @@ namespace API.Models;
             and flight object
 **********************************************************/
 
-public class PassengerFlight_Mapping
+public class PassengerFlight_Booking
 {
     [Key]
     public int PassengerID { get; init; }

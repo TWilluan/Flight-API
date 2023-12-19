@@ -9,7 +9,7 @@ namespace API.Configuration.Extensions;
 
 public static class WebAppBuilder_AddPersistence
 {
-    public static WebApplicationBuilder Add_Persistence(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddPersistence(this WebApplicationBuilder builder)
     {
         builder.Services.AddDbContext<APIdbContext>(options =>
         {
@@ -19,7 +19,7 @@ public static class WebAppBuilder_AddPersistence
 
         builder.Services.AddScoped<IFlightService, FlightService>();
         builder.Services.AddScoped<IPassengerService, PassengerService>();
-        builder.Services.AddScoped< IMappingService, MappingService>();
+        builder.Services.AddScoped<IBookingService, BookingService>();
 
         return builder;
     }

@@ -3,24 +3,27 @@
 using API.Data;
 using API.Models;
 using API.DTOs;
+using AutoMapper;
 
 namespace API.Service;
 
-public class MappingService : IMappingService
+public class BookingService : IBookingService
 {
-    public APIdbContext _dbContext;
-    public MappingService(APIdbContext dbContext)
+    private readonly APIdbContext _dbContext;
+    private readonly IMapper _mapper;
+    public BookingService(APIdbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
-    public async Task<PassengerFlight_Mapping> Booking(int pass_id, string FlightNo, string? seat)
+    public async Task<Reponse_BookingDTO> Booking(int pass_id, string FlightNo, string? seat)
     {
         var passenger = await _dbContext.Passengers.FindAsync(pass_id);
         var flight = await _dbContext.Flights.FindAsync(FlightNo);
 
         if (passenger == null || flight == null) return null!;
         
-        var book = new PassengerFlight_Mapping
+        var book = new PassengerFlight_Booking
         {
             PassengerID = pass_id,
             FlightNo = FlightNo,
@@ -36,14 +39,18 @@ public class MappingService : IMappingService
         _dbContext.PassengerFlightMappings.Add(book);
         await _dbContext.SaveChangesAsync();
 
-        return book;
+        var res = _mapper.Map<Reponse_BookingDTO>(book);
+
+        return res;
     }
 
-    public async Task<PassengerFlight_Mapping> GetBooking(int pass_id, string FlightNo)
+    public async Task<Reponse_BookingDTO> GetBooking(int pass_id, string FlightNo)
     {
         var book = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
 
-        return (book == null) ? null! : book;
+        var res = _mapper.Map<Reponse_BookingDTO>(book);
+
+        return (res == null) ? null! : res;
     }
 
     public async Task ChangeSeat(int pass_id, string FlightNo, string Seat)

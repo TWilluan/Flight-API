@@ -38,13 +38,15 @@ public class PassengerController : ApiController
     {
         _logger.LogInformation($"Calling: {nameof(CreatePassenger)}");
         
-        var pass = await _passService.CreatePassenger(new_passenger);
+        // var pass = await _passService.CreatePassenger(new_passenger);
 
-        return CreatedAtAction(
-            actionName: nameof(CreatePassenger),
-            routeValues: new {id = pass.PassengerID},
-            value: pass
-        );
+        // return CreatedAtAction(
+        //     actionName: nameof(CreatePassenger),
+        //     routeValues: new {id = pass.PassengerID},
+        //     value: pass
+        // );
+
+        return Ok();
     }
 
     // GET: ../passenger/id

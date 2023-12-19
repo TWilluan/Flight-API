@@ -2,8 +2,8 @@
 
 namespace API.Configuration.Exceptions;
 
-public class NotFoundException : ApiException
+public class NotFoundApiException : ApiException
 {
-    public NotFoundException() : base() {}
-    public NotFoundException(string message) : base(message) {}
+    public NotFoundApiException() : base() {}
+    public NotFoundApiException(string message) : base(message) {}
 }

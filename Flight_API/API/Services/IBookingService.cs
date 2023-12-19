@@ -5,7 +5,7 @@ using API.Models;
 
 namespace API.Service;
 
-public interface IMappingService
+public interface IBookingService
 {
     Task<Reponse_BookingDTO> Booking(int pass_id, string FlightNo, string? seat);
     Task<Reponse_BookingDTO> GetBooking(int pass_id, string FlightNo);    
