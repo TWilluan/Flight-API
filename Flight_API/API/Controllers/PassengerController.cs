@@ -37,16 +37,15 @@ public class PassengerController : ApiController
     public async Task<IActionResult> CreatePassenger([FromBody] Create_PassengerDTO new_passenger)
     {
         _logger.LogInformation($"Calling: {nameof(CreatePassenger)}");
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
         
-        // var pass = await _passService.CreatePassenger(new_passenger);
+        var pass = await _passService.CreatePassenger(new_passenger);
 
-        // return CreatedAtAction(
-        //     actionName: nameof(CreatePassenger),
-        //     routeValues: new {id = pass.PassengerID},
-        //     value: pass
-        // );
-
-        return Ok();
+        return Created(new Uri($"{Request.Path}passenger", UriKind.Relative), pass);
     }
 
     // GET: ../passenger/id
@@ -58,9 +57,9 @@ public class PassengerController : ApiController
     {
         _logger.LogInformation($"Calling: {nameof(GetPassenger)}");
         
-        var flight = await _passService.GetPassenger(id);
+        var passenger = await _passService.GetPassenger(id);
         
-        return Ok(flight);
+        return Ok(passenger);
     }
 
     // GET: ../passenger
@@ -72,19 +71,23 @@ public class PassengerController : ApiController
     {
         _logger.LogInformation($"Calling: {nameof(GetAllPassengers)}");
 
-        var flights = await _passService.GetAllPassenger();
+        var passengers = await _passService.GetAllPassenger();
 
-        return Ok(flights);
+        return Ok(passengers);
     }
 
     // GET: ../passenger/flightno
-    [HttpGet("{flightno}")]
+    [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
-    public async Task<ActionResult<IEnumerable<Reponse_FlightDTO>>> GetAllFlights_PassengerHas(string flightno)
+    public async Task<ActionResult<IEnumerable<Reponse_FlightDTO>>> GetAllFlights_PassengerHas(int id)
     {
-        return Ok();
+        _logger.LogInformation($"Calling: {nameof(GetAllFlights_PassengerHas)}");
+
+        var passengers = GetAllFlights_PassengerHas(id);
+
+        return Ok(passengers); 
     }
 
     // POST: ../passenger/id

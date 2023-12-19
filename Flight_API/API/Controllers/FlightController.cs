@@ -52,8 +52,6 @@ public class FlightController : ApiController
 
         var flight = await _flightService.CreateFlight(new_flight);
 
-        _logger.LogInformation($"FlightNo in CreatedAtAction: {flight.FlightNo}");
-
         return Created(new Uri($"{Request.Path}{flight.FlightNo}", UriKind.Relative), flight);
     }
 
@@ -103,7 +101,7 @@ public class FlightController : ApiController
     // PUT: ../flight/flightno
     [HttpPut("{FlightNo}")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateFlight(string FlightNo, Update_FlightDTO flight)
     {
@@ -111,13 +109,13 @@ public class FlightController : ApiController
 
         await _flightService.UpdateFlight(FlightNo, flight);
 
-        return Ok();
+        return NoContent();
     }
 
     // DELETE: ../flight/flightno
     [HttpDelete("{FlightNo}")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteFlight(string FlightNo)
     {
@@ -125,6 +123,6 @@ public class FlightController : ApiController
 
         await _flightService.DeleteFlight(FlightNo);
 
-        return Ok();
+        return NoContent();
     }
 }

@@ -27,23 +27,19 @@ public class BookingController : ControllerBase
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    //  POST: ../booking
+    //  POST: ../booking/pass_id/flightno/seat
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Booking(int pass_id, string flightno, string? seat)
     {
         _logger.LogInformation($"Calling: {nameof(Booking)}");
 
-        var book = await _bookingService.Booking(pass_id, flightno, seat);
+        var booking = await _bookingService.Booking(pass_id, flightno, seat);
 
-        return CreatedAtAction(
-            actionName: nameof(GetBooking),
-            routeValues: new { id = pass_id, flight = flightno },
-            value: book
-        );
+        return Created(new Uri($"{Request.Path}{booking.PassengerID}{booking.FlightNo}", UriKind.Relative), booking);
     }
 
     // GET: ../booking/pass_id/flightno
@@ -55,16 +51,15 @@ public class BookingController : ControllerBase
     {
         _logger.LogInformation($"Calling: {nameof(GetBooking)}");
 
-        var book = await _bookingService.GetBooking(pass_id, flightno);
+        var booking = await _bookingService.GetBooking(pass_id, flightno);
 
-        return Ok(book);
+        return Ok(booking);
     }
 
     // PUT: ../booking/pass_id/flightno/seat
     [HttpPut("{pass_id:int}/{flightno}/{seat}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ChangeSeat(int pass_id, string flightno, string seat)
     {
@@ -75,7 +70,8 @@ public class BookingController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete]
+    // DELETE: ../booking/pass_id/flightno/seat
+    [HttpDelete("{pass_id:int}/{flightno}/{seat}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]

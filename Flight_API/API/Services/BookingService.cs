@@ -4,6 +4,7 @@ using API.Data;
 using API.Models;
 using API.DTOs;
 using AutoMapper;
+using API.Configuration.Exceptions;
 
 namespace API.Service;
 
@@ -19,16 +20,30 @@ public class BookingService : IBookingService
     public async Task<Reponse_BookingDTO> Booking(int pass_id, string FlightNo, string? seat)
     {
         var passenger = await _dbContext.Passengers.FindAsync(pass_id);
+        
+        if (passenger == null)
+        {
+            throw new NotFoundApiException($"Passenger with ID {pass_id} does not exist");
+        }
+        
         var flight = await _dbContext.Flights.FindAsync(FlightNo);
 
-        if (passenger == null || flight == null) return null!;
+        if (flight == null)
+        {
+            throw new NotFoundApiException($"Flight {FlightNo} does not exist");
+        }
+
+        if (flight.Current_Pass == flight.Capacity)
+        {
+            throw new ForbiddenApiException("The flight is full at the moment");
+        }
         
         var book = new PassengerFlight_Booking
         {
             PassengerID = pass_id,
             FlightNo = FlightNo,
-            Passenger = passenger!,
-            Flight = flight!,
+            Passenger = passenger,
+            Flight = flight,
             Seat = seat,
             BookingTime = DateTime.UtcNow
         };
@@ -46,36 +61,46 @@ public class BookingService : IBookingService
 
     public async Task<Reponse_BookingDTO> GetBooking(int pass_id, string FlightNo)
     {
-        var book = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
+        var booking = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
 
-        var res = _mapper.Map<Reponse_BookingDTO>(book);
+        if (booking == null)
+        {
+            throw new NotFoundApiException($"Booking of Passenger {pass_id} to Flight" 
+                                                + " {FlightNo} doesn't exist");
+        }
 
-        return (res == null) ? null! : res;
+        return _mapper.Map<Reponse_BookingDTO>(booking);
     }
 
     public async Task ChangeSeat(int pass_id, string FlightNo, string Seat)
     {
-        var book = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
+        var booking = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
 
-        if (book == null) return;
+        if (booking == null)
+        {
+            throw new NotFoundApiException($"Booking of Passenger {pass_id} to Flight"
+                                                + " {FlightNo} doesn't exist");
+        }
 
-        book.Seat = Seat;
+        booking.Seat = Seat;
+
         await _dbContext.SaveChangesAsync();
     }
+
     public async Task CancelBooking(int pass_id, string FlightNo)
     {
-        var book = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
+        var booking = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
 
-        if (book == null) return;
+        if (booking == null) return;
 
         var passenger = await _dbContext.Passengers.FindAsync(pass_id);
         var flight = await _dbContext.Flights.FindAsync(FlightNo);
 
         if (passenger == null || flight == null) return;
 
-        passenger.PassengerFlightMapper.Remove(book);
-        flight.PassengerFlightMapper.Remove(book);
-        _dbContext.PassengerFlightMappings.Remove(book);
+        passenger.PassengerFlightMapper.Remove(booking);
+        flight.PassengerFlightMapper.Remove(booking);
+        _dbContext.PassengerFlightMappings.Remove(booking);
 
         await _dbContext.SaveChangesAsync();
     }

@@ -1,69 +1,104 @@
 
 using System.Reflection.Metadata.Ecma335;
+using API.Configuration.Exceptions;
 using API.Data;
 using API.DTOs;
 using API.Models;
+using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Service;
 
 public class PassengerService : IPassengerService
 {
-    public APIdbContext _dbContext;
-    public PassengerService(APIdbContext dbContext)
+    private readonly APIdbContext _dbContext;
+    private readonly IMapper _mapper;
+    public PassengerService(APIdbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
-    public async Task CreatePassenger(Create_PassengerDTO new_pass)
+    public async Task<Reponse_PassengerDTO> CreatePassenger(Create_PassengerDTO new_pass)
     {
-        var passenger = new PassengerObject
-        {
-            FirstName = new_pass.FirstName,
-            LastName = new_pass.LastName,
-            Email = new_pass.Email,
-        };
+        var passenger = _mapper.Map<PassengerObject>(new_pass);
+
+        if (_dbContext.Passengers.Any(p =>
+                p.FirstName == passenger.FirstName &&
+                p.LastName == passenger.LastName &&
+                p.Email == passenger.Email))
+                { //    check if there are duplicate passengers
+                    throw new BadRequestApiException("The passenger's information is already existed in database");
+                }
 
         _dbContext.Passengers.Add(passenger);
+
         await _dbContext.SaveChangesAsync();
+
+        return _mapper.Map<Reponse_PassengerDTO>(passenger);
     }
+
     public async Task<Reponse_PassengerDTO> GetPassenger(int pass_id)
     {
         var pass = await _dbContext.Passengers.FindAsync(pass_id);
 
-        if (pass == null) return null!;
-
-        var result = new Reponse_PassengerDTO
+        if (pass == null)
         {
-            FirstName = pass.FirstName,
-            LastName = pass.LastName,
-            Email = pass.Email,
-        };
-        return result;
+            throw new NotFoundApiException($"Passenger with ID {pass_id} doesn't exist");
+        }
+
+        return _mapper.Map<Reponse_PassengerDTO>(pass);
     }
+
     public async Task<IEnumerable<Reponse_PassengerDetailDTO>> GetAllPassenger()
     {
-        var flights = await _dbContext.Passengers.ToListAsync();
+        var passengers = await _dbContext.Passengers.ToListAsync();
 
-        var results = flights.Select(p => new Reponse_PassengerDetailDTO
-                                        {
-                                            FirstName = p.FirstName,
-                                            LastName = p.LastName,
-                                            Email = p.Email,
-                                        }).ToList();
+        if (passengers == null)
+        { //    check if there is a passenger in database
+            throw new NotFoundApiException("There is no passenger in database");
+        }
+
+        var results = passengers.Select(p => 
+                                    _mapper.Map<Reponse_PassengerDetailDTO>(p))
+                                    .ToList();
 
         return results;
     }
+
+    public async Task<IEnumerable<Reponse_FlightDTO>> GetAllFlights_PassengerHas(int id)
+    {
+        var passenger = await _dbContext.Passengers.FindAsync(id);
+
+        if (passenger == null)
+        {
+            throw new NotFoundApiException($"Passenger with ID {id} doesn't exists in database");
+        }
+
+        var flights = passenger.PassengerFlightMapper.Select(f =>
+                               _mapper.Map<Reponse_FlightDTO>(f)).ToList();
+
+        return flights ?? throw new NotFoundApiException($"Passenger with ID {id} doesn't has any flight");
+    }
+
     public async Task UpdatePassenger(int pass_id, Update_PassengerDTO new_pass)
     {
+        if (_dbContext.Passengers.Any(p =>
+                p.FirstName == new_pass.FirstName &&
+                p.LastName == new_pass.LastName &&
+                p.Email == new_pass.Email))
+        { //    check if there are duplicate passengers
+            throw new BadRequestApiException("The passenger's information is already existed in database");
+        }
+
         var pass = await _dbContext.Passengers.FindAsync(pass_id);
 
-        if (pass == null) return;
-        //update
+        if (pass == null)
         {
-            pass.FirstName = new_pass.FirstName;
-            pass.LastName = new_pass.LastName;
-            pass.Email = new_pass.Email;
+            throw new NotFoundApiException($"Passenger with ID {pass_id} doesn't exist");
         }
+    
+        _mapper.Map(new_pass, pass);
 
         await _dbContext.SaveChangesAsync();
     }
@@ -71,9 +106,13 @@ public class PassengerService : IPassengerService
     {
         var pass = await _dbContext.Passengers.FindAsync(pass_id);
 
-        if (pass == null) return;
+        if (pass == null)
+        {
+            throw new NotFoundApiException($"Passenger with ID {pass_id} doesn't exist");
+        }
 
         _dbContext.Passengers.Remove(pass);
+        
         await _dbContext.SaveChangesAsync();
     }
 }

@@ -55,6 +55,11 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
                 message = exception.Message;
                 stacktrace = exception.StackTrace;
                 break;
+            case ForbiddenApiException:
+                statusCode = HttpStatusCode.Forbidden;
+                message = exception.Message;
+                stacktrace = exception.StackTrace;
+                break;
         }
 
         _logger.LogError(exception, $"An error occured: {exception.Message}");
