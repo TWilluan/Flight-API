@@ -52,8 +52,6 @@ public class BookController : ControllerBase
         {
             PassengerID = book.PassengerID,
             FlightNo = book.FlightNo,
-            Passenger = book.Passenger,
-            Flight = book.Flight,
             Seat = book.Seat,
             BookingTime = book.BookingTime
         };

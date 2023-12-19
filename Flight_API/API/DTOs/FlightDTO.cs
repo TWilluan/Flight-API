@@ -11,6 +11,7 @@ public class Create_FlightDTO : DTOs
     [Required]
     [MaxLength(5)]
     [MinLength(5)]
+    [RegularExpression(@"^[A-Z]{3}\d{2}$", ErrorMessage = "FlightNo must be in format \"AAA00\"")]
     public string FlightNo { get; init; } = null!;
     [Required]
     public int Capacity { get; set; }
@@ -43,5 +44,6 @@ public class Reponse_FlightDTO : DTOs
 
 public class Reponse_FlightDetailDTO : Reponse_FlightDTO, DTOs
 {
-    
+    public int Capacity { get; set; }
+    public int Current_Pass { get; set; }
 }

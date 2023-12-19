@@ -21,5 +21,5 @@ public class People
 
     [Required]
     [EmailAddress(ErrorMessage = "The email is not valid")]
-    public string Email { get; set; } = string.Empty + "@gmail.com";
+    public string Email { get; set; } = string.Empty;
 }
