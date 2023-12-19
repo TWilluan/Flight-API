@@ -6,8 +6,15 @@ using API.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using API.Service;
 using API.Configuration.Exceptions;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace API.Controllers;
+
+/***************************************************************
+    FlightController:
+        The `FlightContrller` is responsible for handling basic 
+            operations related to flights in the airline system.
+****************************************************************/
 
 [ApiController]
 [Route("[controller]")]
@@ -22,14 +29,7 @@ public class FlightController : ApiController
         _flightService = flightService ?? throw new ArgumentNullException(nameof(flightService));
     }
 
-    [HttpGet("test/notfound")]
-    public IActionResult TestNotFound()
-    {
-        throw new NotFoundException("Resource not found.");
-    }
-
-
-    // POST: ../api/flight/
+    // POST: ../flight/
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -38,18 +38,16 @@ public class FlightController : ApiController
     {
         _logger.LogInformation($"Calling: {nameof(CreateFlight)}");
 
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        // Call service to add flight to database
         await _flightService.CreateFlight(flight);
-        
-        return Created(
-            new Uri($"{Request.Path}/{flight.FlightNo}", UriKind.Relative), 
-            flight);
+
+        return CreatedAtAction(
+            actionName: nameof(GetFlight),
+            routeValues: new {id = flight.FlightNo},
+            value: flight
+        );
     }
 
-    // GET: ../api/flight/flightno
+    // GET: ../flight/flightno
     [HttpGet("{FlightNo}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -62,18 +60,30 @@ public class FlightController : ApiController
         return Ok(flight);
     }
 
+    // GET: ../flight
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<IEnumerable<Reponse_FlightDetailDTO>>> GetAllFlight()
+    public async Task<ActionResult<IEnumerable<Reponse_FlightDetailDTO>>> GetAllFlights()
     {
-        _logger.LogInformation($"Calling: {nameof(GetAllFlight)}");
+        _logger.LogInformation($"Calling: {nameof(GetAllFlights)}");
 
         var flights = await _flightService.GetAllFlight();
+
         return Ok(flights);
     }
 
-    // PUT: ../api/flight/flightno
+    // GET: ../flight/flightno
+    [HttpGet("{flightno}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<Reponse_PassengerDTO>>> GetAllPassenger_InFlight(string FlightNo)
+    {
+        return Ok();
+    }
+
+    // PUT: ../flight/flightno
     [HttpPut("{FlightNo}")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -87,7 +97,7 @@ public class FlightController : ApiController
         return Ok();
     }
 
-    // DELETE : ../api/flight/flightno
+    // DELETE : ../flight/flightno
     [HttpDelete("{FlightNo}")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -95,9 +105,9 @@ public class FlightController : ApiController
     public async Task<IActionResult> DeleteFlight(string FlightNo)
     {
         _logger.LogInformation($"Calling: {nameof(DeleteFlight)}");
-        
+
         await _flightService.DeleteFlight(FlightNo);
-        
+
         return Ok();
     }
 }

@@ -1,6 +1,7 @@
 
 
 using API.Configuration.Exceptions;
+using API.Controller;
 using API.DTOs;
 using API.Models;
 using API.Service;
@@ -8,9 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+/***************************************************************
+    PassengerController:
+        The `PassengerController` is responsible for handling basic 
+            operations related to flights in the airline system.
+****************************************************************/
+
 [ApiController]
-[Route("[controller]")] // : ../api/passenger
-public class PassengerController : ControllerBase
+[Route("[controller]")]
+public class PassengerController : ApiController
 {
     public IPassengerService _passService;
     public ILogger<PassengerController> _logger;
@@ -22,28 +29,26 @@ public class PassengerController : ControllerBase
     }
 
 
-    // POST: ../api/passenger/
+    // POST: ../passenger/
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreatePassenger([FromBody] Create_PassengerDTO pass)
+    public async Task<IActionResult> CreatePassenger([FromBody] Create_PassengerDTO new_passenger)
     {
         _logger.LogInformation($"Calling: {nameof(CreatePassenger)}");
-
-        if (!ModelState.IsValid)
-            return BadRequest();
-
-        await _passService.CreatePassenger(pass);
+        
+        var pass = await _passService.CreatePassenger(new_passenger);
 
         return CreatedAtAction(
             actionName: nameof(CreatePassenger),
+            routeValues: new {id = pass.PassengerID},
             value: pass
         );
     }
 
-    // GET: ../api/passenger/id
-    [HttpGet("{id}")]
+    // GET: ../passenger/id
+    [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -52,46 +57,52 @@ public class PassengerController : ControllerBase
         _logger.LogInformation($"Calling: {nameof(GetPassenger)}");
         
         var flight = await _passService.GetPassenger(id);
-
-        if (flight == null)
-            throw new NotFoundException();
         
         return Ok(flight);
     }
 
+    // GET: ../passenger
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
-    public async Task<ActionResult<IEnumerable<Reponse_PassengerDetailDTO>>> GetAllPassenger()
+    public async Task<ActionResult<IEnumerable<Reponse_PassengerDetailDTO>>> GetAllPassengers()
     {
-        _logger.LogInformation($"Calling: {nameof(GetAllPassenger)}");
+        _logger.LogInformation($"Calling: {nameof(GetAllPassengers)}");
 
         var flights = await _passService.GetAllPassenger();
-
-        if (flights == null)
-            return NotFound();
 
         return Ok(flights);
     }
 
-    // POST: ../api/passenger/id
-    [HttpPut("{id}")]
+    // GET: ../passenger/flightno
+    [HttpGet("{flightno}")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
+    public async Task<ActionResult<IEnumerable<Reponse_FlightDTO>>> GetAllFlights_PassengerHas(string flightno)
+    {
+        return Ok();
+    }
+
+    // POST: ../passenger/id
+    [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdatePassenger(int id, Update_PassengerDTO pass)
     {
         _logger.LogInformation($"Calling: {nameof(UpdatePassenger)}");
 
         await _passService.UpdatePassenger(id, pass);
-        return Ok();
+
+        return NoContent();
     }
 
-    // DELETE: ../api/passenger/id
-    [HttpDelete("{id:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    // DELETE: ../passenger/id
+    [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeletePassenger(int id)
@@ -99,6 +110,7 @@ public class PassengerController : ControllerBase
         _logger.LogInformation($"Calling: {nameof(DeletePassenger)}");
 
         await _passService.DeletePassenger(id);
-        return Ok();
+
+        return NoContent();
     }
 }
