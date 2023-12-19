@@ -18,7 +18,10 @@ Content-Type: application/json
 }
 
 ### GET Flight HCM20 Request
-GET http://localhost:5212/flight/HCM20 HTTP/1.1
+GET http://localhost:5212/flight/HCM21 HTTP/1.1
+
+###
+GET http://localhost:5212/flight/test/notfound HTTP/1.1
 
 ### Update Flight HCM20 Request
 PUT http://localhost:5212/flight/HCM20 HTTP/1.1
