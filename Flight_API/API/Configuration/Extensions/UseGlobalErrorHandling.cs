@@ -8,7 +8,7 @@ namespace API.Configuration.Extensions;
 public enum ErrorHandlingType
 {
     ErrorController,
-    Middleware
+    CustomMiddleware
 }
 
 public class GlobalErrorHandlingOptions
@@ -31,7 +31,7 @@ public static class WebAppBuilder_UseGlobalErrorHandling
             case ErrorHandlingType.ErrorController:
                 webapp.UseExceptionHandler("/error");
                 break;
-            case ErrorHandlingType.Middleware:
+            case ErrorHandlingType.CustomMiddleware:
                 webapp.UseMiddleware<GlobalExceptionHandlingMiddleware>();
                 break;
         }

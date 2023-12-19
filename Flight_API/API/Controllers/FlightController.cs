@@ -84,7 +84,7 @@ public class FlightController : ApiController
     }
 
     // GET: ../flight/flightno
-    [HttpGet("{flightno}")]
+    [HttpGet("{flightno}allpassenger")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

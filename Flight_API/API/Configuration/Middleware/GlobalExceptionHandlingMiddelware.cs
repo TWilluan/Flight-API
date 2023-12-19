@@ -69,7 +69,8 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
             Status = (int)statusCode,
             Type = "[Custome Middleware] Error",
             Title = message,
-            Detail = stacktrace
+            //Detail = stacktrace //uncomment to show specific detail
+            Detail = "Hide to protect important data"
         };
 
         var resultJson = JsonSerializer.Serialize(problem);

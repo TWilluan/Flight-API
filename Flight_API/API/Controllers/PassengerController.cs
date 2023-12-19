@@ -76,8 +76,8 @@ public class PassengerController : ApiController
         return Ok(passengers);
     }
 
-    // GET: ../passenger/flightno
-    [HttpGet("{id:int}")]
+    // GET: ../passenger/id/allflight
+    [HttpGet("{id:int}allflight")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
