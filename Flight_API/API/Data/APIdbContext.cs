@@ -8,19 +8,20 @@ namespace API.Data;
 
 public class APIdbContext : DbContext
 {
-    public DbSet<FlightObject> Flights {get; set;}
-    public DbSet<PassengerObject> Passengers {get; set;}
-    public DbSet<PassengerFlight_Booking> PassengerFlightMappings {get;set;}
+    public DbSet<FlightObject> Flights { get; set; }
+    public DbSet<PassengerObject> Passengers { get; set; }
+    public DbSet<PassengerFlight_Booking> PassengerFlightMappings { get; set; }
 
-    public APIdbContext() {}
+    public APIdbContext() { } // fix issue cannot create dbContext
 
-    public APIdbContext(DbContextOptions<APIdbContext> options) : base(options) {}
+    public APIdbContext(DbContextOptions<APIdbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<PassengerFlight_Booking>().
-            HasKey(fp => new {fp.FlightNo, fp.PassengerID});
+            HasKey(fp => new { fp.FlightNo, fp.PassengerID });
 
+        //  decalre many-to-many relationship between flight and passenger
         modelBuilder.Entity<PassengerFlight_Booking>()
             .HasOne(fp => fp.Flight)
             .WithMany(f => f.PassengerFlightMapper)
@@ -31,6 +32,7 @@ public class APIdbContext : DbContext
             .WithMany(p => p.PassengerFlightMapper)
             .HasForeignKey(fp => fp.PassengerID);
 
+        //  Seeding data to flight and passenger table
         modelBuilder.ApplyConfiguration(new FlightConfiguration());
         modelBuilder.ApplyConfiguration(new PassengerConfiguration());
     }

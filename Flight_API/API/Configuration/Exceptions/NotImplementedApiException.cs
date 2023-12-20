@@ -7,7 +7,5 @@ public class NotImplementedApiException : ApiException
 {
     public NotImplementedApiException() : base() { }
 
-    public NotImplementedApiException(string message) : base(message)
-    {
-    }
+    public NotImplementedApiException(string message) : base(message) { }
 }
