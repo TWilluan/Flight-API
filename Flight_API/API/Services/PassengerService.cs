@@ -44,7 +44,7 @@ public class PassengerService : IPassengerService
 
         if (pass == null)
         {
-            throw new NotFoundApiException($"Passenger with ID {pass_id} doesn't exist");
+            throw new NotFoundApiException($"Passenger with ID {pass_id} does not exist");
         }
 
         return _mapper.Map<Reponse_PassengerDTO>(pass);
@@ -68,17 +68,22 @@ public class PassengerService : IPassengerService
 
     public async Task<IEnumerable<Reponse_FlightDTO>> GetAllFlights_PassengerHas(int id)
     {
-        var passenger = await _dbContext.Passengers.FindAsync(id);
+        var passenger = await _dbContext.Passengers
+                    .Include(p => p.PassengerFlightMapper)
+                    .ThenInclude(b => b.Flight)
+                    .FirstOrDefaultAsync(p => p.Passenger_ID == id);
 
         if (passenger == null)
         {
-            throw new NotFoundApiException($"Passenger with ID {id} doesn't exists in database");
+            throw new NotFoundApiException($"Passenger with ID {id} does not exists in database");
         }
 
-        var flights = passenger.PassengerFlightMapper.Select(f =>
-                               _mapper.Map<Reponse_FlightDTO>(f)).ToList();
+        var flights = passenger.PassengerFlightMapper
+                    .Select(b => b.Flight)
+                    .Select(f => _mapper.Map<Reponse_FlightDTO>(f))
+                    .ToList();
 
-        return flights ?? throw new NotFoundApiException($"Passenger with ID {id} doesn't has any flight");
+        return flights;
     }
 
     public async Task UpdatePassenger(int pass_id, Update_PassengerDTO new_pass)
@@ -95,7 +100,7 @@ public class PassengerService : IPassengerService
 
         if (pass == null)
         {
-            throw new NotFoundApiException($"Passenger with ID {pass_id} doesn't exist");
+            throw new NotFoundApiException($"Passenger with ID {pass_id} does not exist");
         }
     
         _mapper.Map(new_pass, pass);
@@ -108,7 +113,7 @@ public class PassengerService : IPassengerService
 
         if (pass == null)
         {
-            throw new NotFoundApiException($"Passenger with ID {pass_id} doesn't exist");
+            throw new NotFoundApiException($"Passenger with ID {pass_id} does not exist");
         }
 
         _dbContext.Passengers.Remove(pass);

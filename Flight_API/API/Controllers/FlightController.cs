@@ -84,17 +84,17 @@ public class FlightController : ApiController
     }
 
     // GET: ../flight/flightno
-    [HttpGet("{flightno}allpassenger")]
+    [HttpGet("{flightno}/allpassenger")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<Reponse_PassengerDTO>>> GetAllPassenger_InFlight(string FlightNo)
+    public async Task<ActionResult<IEnumerable<Reponse_PassengerDTO>>> GetAllPassengers_InFlight(string FlightNo)
     {
-        _logger.LogInformation($"Calling: {nameof(GetAllPassenger_InFlight)}");
+        _logger.LogInformation($"Calling: {nameof(GetAllPassengers_InFlight)}");
 
-        await _flightService.GetAllPassenger_InFlight(FlightNo);
+        var passengers = await _flightService.GetAllPassenger_InFlight(FlightNo);
 
-        return Ok();
+        return Ok(passengers);
 
     }
 

@@ -5,6 +5,7 @@ using API.Models;
 using API.DTOs;
 using AutoMapper;
 using API.Configuration.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Service;
 
@@ -20,21 +21,20 @@ public class BookingService : IBookingService
     public async Task<Reponse_BookingDTO> Booking(int pass_id, string FlightNo, string? seat)
     {
         var passenger = await _dbContext.Passengers.FindAsync(pass_id);
-        
-        if (passenger == null)
-        {
-            throw new NotFoundApiException($"Passenger with ID {pass_id} does not exist");
-        }
-        
         var flight = await _dbContext.Flights.FindAsync(FlightNo);
 
+        if (passenger == null)
+        { //    check if passenger exists
+            throw new NotFoundApiException($"Passenger with ID {pass_id} does not exist");
+        }
+
         if (flight == null)
-        {
+        { //    check if flight exists
             throw new NotFoundApiException($"Flight {FlightNo} does not exist");
         }
 
-        if (flight.Current_Pass == flight.Capacity)
-        {
+        if (flight.Current_Pass >= flight.Capacity)
+        { //    check if flight is capable of adding passengers
             throw new ForbiddenApiException("The flight is full at the moment");
         }
         
@@ -44,10 +44,11 @@ public class BookingService : IBookingService
             FlightNo = FlightNo,
             Passenger = passenger,
             Flight = flight,
-            Seat = seat,
+            Seat = seat ?? "",
             BookingTime = DateTime.UtcNow
         };
 
+        //
         passenger.PassengerFlightMapper.Add(book);
         flight.PassengerFlightMapper.Add(book);
 
@@ -61,25 +62,32 @@ public class BookingService : IBookingService
 
     public async Task<Reponse_BookingDTO> GetBooking(int pass_id, string FlightNo)
     {
-        var booking = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
+
+        var booking = await _dbContext.PassengerFlightMappings
+                        .Where(pf => pf.PassengerID == pass_id && pf.FlightNo == FlightNo)
+                        .FirstOrDefaultAsync();
 
         if (booking == null)
         {
             throw new NotFoundApiException($"Booking of Passenger {pass_id} to Flight" 
-                                                + " {FlightNo} doesn't exist");
+                                       + $" {FlightNo} does not exist");
         }
 
-        return _mapper.Map<Reponse_BookingDTO>(booking);
+        var res = _mapper.Map<Reponse_BookingDTO>(booking);
+
+        return res;
     }
 
     public async Task ChangeSeat(int pass_id, string FlightNo, string Seat)
     {
-        var booking = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
+        var booking = await _dbContext.PassengerFlightMappings
+                        .Where(pf => pf.PassengerID == pass_id && pf.FlightNo == FlightNo)
+                        .FirstOrDefaultAsync();
 
         if (booking == null)
         {
             throw new NotFoundApiException($"Booking of Passenger {pass_id} to Flight"
-                                                + " {FlightNo} doesn't exist");
+                                                + $" {FlightNo} does not exist");
         }
 
         booking.Seat = Seat;
@@ -89,17 +97,26 @@ public class BookingService : IBookingService
 
     public async Task CancelBooking(int pass_id, string FlightNo)
     {
-        var booking = await _dbContext.PassengerFlightMappings.FindAsync(pass_id, FlightNo);
+        var booking = await _dbContext.PassengerFlightMappings
+                        .Where(pf => pf.PassengerID == pass_id && pf.FlightNo == FlightNo)
+                        .FirstOrDefaultAsync();
 
-        if (booking == null) return;
+        if (booking == null)
+        {
+            throw new NotFoundApiException($"Booking of Passenger {pass_id} to Flight"
+                                       + $" {FlightNo} does not exist");
+        }
 
-        var passenger = await _dbContext.Passengers.FindAsync(pass_id);
-        var flight = await _dbContext.Flights.FindAsync(FlightNo);
+        // booking.Flight.PassengerFlightMapper.Remove(booking);
 
-        if (passenger == null || flight == null) return;
+        // var passenger = await _dbContext.Passengers.FindAsync(pass_id);
+        // var flight = await _dbContext.Flights.FindAsync(FlightNo);
 
-        passenger.PassengerFlightMapper.Remove(booking);
-        flight.PassengerFlightMapper.Remove(booking);
+        // if (passenger == null || flight == null) return;
+
+        // passenger.PassengerFlightMapper.Remove(booking);
+        // flight.PassengerFlightMapper.Remove(booking);
+
         _dbContext.PassengerFlightMappings.Remove(booking);
 
         await _dbContext.SaveChangesAsync();

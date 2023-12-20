@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(APIdbContext))]
-    [Migration("20231215101452_initialSeed")]
-    partial class initialSeed
+    [Migration("20231220055813_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace API.Data.Migrations
                             Gate = "",
                             Origin = "DUL",
                             TimeDes = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TimeOri = new DateTime(2023, 12, 15, 5, 14, 52, 551, DateTimeKind.Local).AddTicks(1740)
+                            TimeOri = new DateTime(2023, 12, 20, 0, 58, 13, 14, DateTimeKind.Local).AddTicks(5320)
                         },
                         new
                         {
@@ -83,7 +83,7 @@ namespace API.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("API.Models.PassengerFlight_Mapping", b =>
+            modelBuilder.Entity("API.Models.PassengerFlight_Booking", b =>
                 {
                     b.Property<string>("FlightNo")
                         .HasColumnType("varchar(5)");
@@ -93,6 +93,11 @@ namespace API.Data.Migrations
 
                     b.Property<DateTime>("BookingTime")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Seat")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("Seat");
 
                     b.HasKey("FlightNo", "PassengerID");
 
@@ -130,19 +135,19 @@ namespace API.Data.Migrations
                         {
                             PassengerID = 1,
                             Email = "abc@gmail.com",
-                            FirstName = "Tuan",
-                            LastName = "Vo"
+                            FirstName = "Bach",
+                            LastName = "Duong"
                         },
                         new
                         {
                             PassengerID = 2,
                             Email = "cba@gmail.com",
-                            FirstName = "Chi",
-                            LastName = "Le"
+                            FirstName = "Nhi",
+                            LastName = "Mai"
                         });
                 });
 
-            modelBuilder.Entity("API.Models.PassengerFlight_Mapping", b =>
+            modelBuilder.Entity("API.Models.PassengerFlight_Booking", b =>
                 {
                     b.HasOne("API.Models.FlightObject", "Flight")
                         .WithMany("PassengerFlightMapper")

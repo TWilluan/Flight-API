@@ -16,7 +16,7 @@ namespace API.Controller;
 
 [ApiController]
 [Route("[controller]")]
-public class BookingController : ControllerBase
+public class BookingController : ApiController
 {
     public IBookingService _bookingService;
     public ILogger<BookingController> _logger;
@@ -27,13 +27,16 @@ public class BookingController : ControllerBase
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    //  POST: ../booking/pass_id/flightno/seat
+    //  POST: ../booking
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Booking(int pass_id, string flightno, string? seat)
+    public async Task<IActionResult> Booking(
+        [FromQuery] int pass_id,
+        [FromQuery] string flightno,
+        [FromQuery] string? seat)
     {
         _logger.LogInformation($"Calling: {nameof(Booking)}");
 
@@ -42,12 +45,14 @@ public class BookingController : ControllerBase
         return Created(new Uri($"{Request.Path}{booking.PassengerID}{booking.FlightNo}", UriKind.Relative), booking);
     }
 
-    // GET: ../booking/pass_id/flightno
-    [HttpGet("{pass_id:int}/{flightno}")]
+    // GET: ../booking
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Reponse_BookingDTO>> GetBooking(int pass_id, string flightno)
+    public async Task<ActionResult<Reponse_BookingDTO>> GetBooking(
+        [FromQuery] int pass_id,
+        [FromQuery] string flightno)
     {
         _logger.LogInformation($"Calling: {nameof(GetBooking)}");
 
@@ -56,31 +61,36 @@ public class BookingController : ControllerBase
         return Ok(booking);
     }
 
-    // PUT: ../booking/pass_id/flightno/seat
-    [HttpPut("{pass_id:int}/{flightno}/{seat}")]
+    // PUT: ../booking
+    [HttpPut]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> ChangeSeat(int pass_id, string flightno, string seat)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> ChangeSeat(
+        [FromQuery] int pass_id,
+        [FromQuery] string flightno,
+        [FromQuery] string seat)
     {
         _logger.LogInformation($"Calling: {nameof(ChangeSeat)}");
 
         await _bookingService.ChangeSeat(pass_id, flightno, seat);
 
-        return Ok();
+        return NoContent();
     }
 
-    // DELETE: ../booking/pass_id/flightno/seat
-    [HttpDelete("{pass_id:int}/{flightno}/{seat}")]
+    // DELETE: ../booking/
+    [HttpDelete()]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> DeleteBooking(int pass_id, string flightno)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteBooking(
+        [FromQuery] int pass_id, 
+        [FromQuery] string flightno)
     {
-        _logger.LogInformation($"Calling: {nameof(ChangeSeat)}");
+        _logger.LogInformation($"Calling: {nameof(DeleteBooking)}");
 
         await _bookingService.CancelBooking(pass_id, flightno);
 
-        return Ok();
+        return NoContent();
     }
 }

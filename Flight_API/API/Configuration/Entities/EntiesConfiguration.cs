@@ -35,16 +35,16 @@ public class PassengerConfiguration : IEntityTypeConfiguration<PassengerObject>
             new PassengerObject
             {
                 Passenger_ID = 1,
-                FirstName = "Tuan",
-                LastName = "Vo",
+                FirstName = "Bach",
+                LastName = "Duong",
                 Email = "abc@gmail.com"
             },
 
             new PassengerObject
             {
                 Passenger_ID = 2,
-                FirstName = "Chi",
-                LastName = "Le",
+                FirstName = "Nhi",
+                LastName = "Mai",
                 Email = "cba@gmail.com"
             }
         );

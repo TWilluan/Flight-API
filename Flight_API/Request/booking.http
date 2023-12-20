@@ -1,0 +1,12 @@
+
+### Create Booking flight
+POST http://localhost:5212/booking?pass_id=2&flightno=AYE35 HTTP/1.1
+
+### GET booking
+GET http://localhost:5212/booking?pass_id=1&flightno=AYE35 HTTP/1.1
+
+### Update Seat for booking
+PUT http://localhost:5212/booking?pass_id=1&flightno=AYE35&seat=A13 HTTP/1.1
+
+### DELETE Booking
+DELETE  http://localhost:5212/booking?pass_id=2&flightno=AYE35 HTTP/1.1

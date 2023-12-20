@@ -66,22 +66,21 @@ public class FlightService : IFlightService
 
     public async Task<IEnumerable<Reponse_PassengerDTO>> GetAllPassenger_InFlight(string FlightNo)
     {
-        var flight = await _dbContext.Flights.FindAsync(FlightNo);
+        var flight = await _dbContext.Flights
+            .Include(f => f.PassengerFlightMapper)  // Ensure Bookings are loaded
+            .ThenInclude(b => b.Passenger)  // Ensure Passenger is loaded within each Booking
+            .FirstOrDefaultAsync(f => f.FlightNo == FlightNo);
 
         if (flight == null)
         {
-            throw new NotFoundApiException($"Flight {FlightNo} is not in database");
+            throw new NotFoundApiException($"Flight {FlightNo} is not in the database");
         }
 
-        var passengers = flight.PassengerFlightMapper.Select(p =>
-                            _mapper.Map<Reponse_PassengerDTO>(p))
-                            .ToList();
+        var passengers = flight.PassengerFlightMapper
+            .Select(b => b.Passenger)
+            .Select(p => _mapper.Map<Reponse_PassengerDTO>(p))
+            .ToList();
 
-        if (passengers == null)
-        {
-            throw new NotFoundApiException($"There is no passenger in flight {FlightNo}");
-        }
-        
         return passengers;
     }
 

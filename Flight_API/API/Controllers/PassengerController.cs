@@ -77,17 +77,17 @@ public class PassengerController : ApiController
     }
 
     // GET: ../passenger/id/allflight
-    [HttpGet("{id:int}allflight")]
+    [HttpGet("{id:int}/allflight")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Reponse_FlightDTO>>> GetAllFlights_PassengerHas(int id)
     {
         _logger.LogInformation($"Calling: {nameof(GetAllFlights_PassengerHas)}");
 
-        var passengers = await GetAllFlights_PassengerHas(id);
+        var flights = await _passService.GetAllFlights_PassengerHas(id);
 
-        return Ok(passengers); 
+        return Ok(flights); 
     }
 
     // POST: ../passenger/id

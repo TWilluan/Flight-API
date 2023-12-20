@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initialSeed : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,6 +66,8 @@ namespace API.Data.Migrations
                     PassengerID = table.Column<int>(type: "int", nullable: false),
                     FlightNo = table.Column<string>(type: "varchar(5)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Seat = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     BookingTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
@@ -91,7 +93,7 @@ namespace API.Data.Migrations
                 columns: new[] { "FlightNo", "Capacity", "Current_Pass", "Destination", "Gate", "Origin", "Time_Des", "Time_Ori" },
                 values: new object[,]
                 {
-                    { "AYE35", 150, 0, "TSA", "", "DUL", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 15, 5, 14, 52, 551, DateTimeKind.Local).AddTicks(1740) },
+                    { "AYE35", 150, 0, "TSA", "", "DUL", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 12, 20, 0, 58, 13, 14, DateTimeKind.Local).AddTicks(5320) },
                     { "EYA23", 180, 0, "DUL", "", "TSA", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
@@ -100,8 +102,8 @@ namespace API.Data.Migrations
                 columns: new[] { "Passenger_ID", "Email", "FirstName", "LastName" },
                 values: new object[,]
                 {
-                    { 1, "abc@gmail.com", "Tuan", "Vo" },
-                    { 2, "cba@gmail.com", "Chi", "Le" }
+                    { 1, "abc@gmail.com", "Bach", "Duong" },
+                    { 2, "cba@gmail.com", "Nhi", "Mai" }
                 });
 
             migrationBuilder.CreateIndex(
