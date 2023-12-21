@@ -29,7 +29,7 @@ Welcome to the Flight REST API documentation! This API provides a set of endpoin
     - [2. Get Booking](#2-get-flight-details)
     - [3. Change Seat](#3-book-a-flight)
     - [4. Cancel Booking](#4-cancel-booking)
-- [Error Handling](#error-handling)
+- [Error and Exception Handling](#error-and-exception-handling)
 - [Sample Requests and Responses](#sample-requests-and-responses)
 
 ---
@@ -52,8 +52,8 @@ http://localhost:5212/
 <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
 ```
 5. LINQ
-# API Definition
 
+# API endpoints
 ## Flight
 #### Create Flight
 ```js
@@ -159,8 +159,54 @@ PUT http://localhost:5212/booking?pass_id=1&flightno=AYE35&seat=A13 HTTP/1.1
 ```js
 DELETE  http://localhost:5212/booking?pass_id=2&flightno=AYE35 HTTP/1.1
 ```
-## Error and Exception Handlings
+## Error and Exception Handling
+## Common Error Codes
 
+### 400 Bad Request
+
+- **Description**: Indicates that the client's request is malformed or invalid.
+- **Example Scenario**: Invalid or missing input parameters.
+
+### 401 Unauthorized
+
+- **Description**: Indicates that authentication is required and has failed or has not been provided.
+- **Example Scenario**: Invalid API key.
+
+### 403 Forbidden
+
+- **Description**: Indicates that the requested resource could not be completed due to business logic
+- **Example Scenario**: Passenger can not book full flight.
+
+### 404 Not Found
+
+- **Description**: Indicates that the requested resource could not be found.
+- **Example Scenario**: Requested flight, passenger, or booking not found.
+
+### 500 Internal Server Error
+
+- **Description**: Indicates that an unexpected error occurred on the server.
+- **Example Scenario**: Database connection issues.
+
+## Custom Error Responses
+
+In addition to standard HTTP error codes, the Flight API may return custom error responses with detailed information about the issue.
+
+### Example Custom Error Response
+
+```json
+{
+  "Status": "Exception.statuscode",
+  "Type": "[Custome Middleware] Error",
+  "Title": "Exception.message",
+  "Detail": "Exception.stacktrace"
+}
+```
 
 ## Sample Requests and Responses
+#### Usage
+Simply `git clone https://github.com/TWilluan/Flight-API.git`
+Then move to Flight_API folder using `cd`
+Run the project `dotnet run`
+
+#### Request
 There are sample requests in folder [request](./Request/)
