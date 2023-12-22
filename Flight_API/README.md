@@ -1,6 +1,6 @@
 # Flight Management RESTful API
 
-Welcome to the Flight REST API documentation! This API provides a set of endpoints to access and manage flight and Passenger-related  basic information. Whether you're building a travel application, tracking flights, integrating flight data, retrieving and editing passengers' information into your system, this API has you covered.
+Welcome to the Flight REST API documentation! This API provides a set of endpoints to access and manage flight and Passenger-related  basic information. Whether you're building a travel application, tracking flights, integrating flight data, or retrieving and editing passengers' information into your system, this API has you covered.
 
 ---
 
